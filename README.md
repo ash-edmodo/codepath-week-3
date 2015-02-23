@@ -17,3 +17,10 @@
 [x] User can then enter a new tweet and post this to twitter
 
 [x] User is taken back to home timeline with new tweet visible in timeline
+
+
+Walk Through 1
+--------------
+![Video Walkthrough](https://raw.githubusercontent.com/ash-edmodo/codepath-week-3/master/walkthrough1.gif)
+
+GIF created with [LiceCap](http://www.cockos.com/licecap/).

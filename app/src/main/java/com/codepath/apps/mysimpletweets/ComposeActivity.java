@@ -10,6 +10,7 @@ import android.widget.Toast;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
 import org.apache.http.Header;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 public class ComposeActivity extends ActionBarActivity {
@@ -43,12 +44,23 @@ public class ComposeActivity extends ActionBarActivity {
     }
 
     public void sendTweet(MenuItem item) {
-
         EditText etTweet = (EditText) findViewById(R.id.etTweetBody);
         TwitterApplication.getRestClient().createTweet(etTweet.getText().toString(), new JsonHttpResponseHandler(){
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 finish();
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                Toast.makeText(ComposeActivity.this, R.string.network_error, Toast.LENGTH_LONG).show();
+                super.onFailure(statusCode, headers, throwable, errorResponse);
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
+                Toast.makeText(ComposeActivity.this, R.string.network_error, Toast.LENGTH_LONG).show();
+                super.onFailure(statusCode, headers, throwable, errorResponse);
             }
 
             @Override

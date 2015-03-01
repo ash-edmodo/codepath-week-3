@@ -10,5 +10,10 @@
     <string name="action_tweet">Tweet</string>
     <string name="title_activity_compose">ComposeActivity</string>
     <string name="action_send">Send</string>
+    <string name="home">Home</string>
+    <string name="mentions">Mentions</string>
+    <string name="profile">Profile</string>
+    <string name="title_activity_profile">ProfileActivity</string>
+    <string name="stuff">stuff</string>
 
 </resources>

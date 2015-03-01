@@ -1,6 +1,7 @@
 package com.codepath.apps.mysimpletweets;
 
 import android.content.Context;
+import android.content.Intent;
 import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,8 +18,11 @@ import java.util.List;
 
 public class TweetsArrayAdapter extends ArrayAdapter<Tweet> {
 
+    private final Context context;
+
     public TweetsArrayAdapter(Context context, List<Tweet> tweets) {
         super(context, 0, tweets);
+        this.context = context;
     }
 
     @Override
@@ -42,6 +46,15 @@ public class TweetsArrayAdapter extends ArrayAdapter<Tweet> {
 
         ivProfile.setImageResource(0);
         Picasso.with(getContext()).load(user.getProfileImageUrl()).into(ivProfile);
+
+        ivProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(context, ProfileActivity.class);
+                i.putExtra(User.SCREEN_NAME, user.getScreenName());
+                context.startActivity(i);
+            }
+        });
         return convertView;
     }
 }

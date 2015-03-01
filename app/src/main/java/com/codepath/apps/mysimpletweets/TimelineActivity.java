@@ -2,108 +2,34 @@ package com.codepath.apps.mysimpletweets;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ListView;
-import android.widget.Toast;
 
-import com.codepath.apps.mysimpletweets.models.Tweet;
-import com.loopj.android.http.JsonHttpResponseHandler;
-
-import org.apache.http.Header;
-import org.json.JSONArray;
-import org.json.JSONObject;
-
-import java.util.ArrayList;
+import com.astuetz.PagerSlidingTabStrip;
+import com.codepath.apps.mysimpletweets.fragments.HomeTimelineFragment;
+import com.codepath.apps.mysimpletweets.fragments.MentionsTimelineFragment;
+import com.codepath.apps.mysimpletweets.fragments.SmartFragmentStatePagerAdapter;
+import com.codepath.apps.mysimpletweets.fragments.TweetsListFragment;
 
 public class TimelineActivity extends ActionBarActivity {
-
-    private TwitterClient client;
-    private ArrayList<Tweet> tweets;
-    private TweetsArrayAdapter adapter;
-    private ListView lvTweets;
-    private long lastTweetId;
+    ViewPager viewPager;
+    private TweetsPagerAdapter pagerAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_timeline);
-        
-        lvTweets = (ListView) findViewById(R.id.lvTweets);
-        
-        tweets = new ArrayList<>();
-        adapter = new TweetsArrayAdapter(this, tweets);
-        lvTweets.setAdapter(adapter);
-        
-        lvTweets.setOnScrollListener(new EndlessScrollListener() {
-            @Override
-            protected void onLoadMore(int page, int totalItemCount) {
-                loadMoreDataFromApi();
-            }
-        });
-        
-        client = TwitterApplication.getRestClient();
-        populateTimeline();
-    }
 
-    private void populateTimeline() {
-        client.getHomeTimeLine(new JsonHttpResponseHandler() {
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
-                adapter.clear();
-                addTweets(response);
-            }
+        viewPager = (ViewPager) findViewById(R.id.viewpager);
+        pagerAdapter = new TweetsPagerAdapter(getSupportFragmentManager());
+        viewPager.setAdapter(pagerAdapter);
 
-            @Override
-            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                Toast.makeText(TimelineActivity.this, getString(R.string.network_error), Toast.LENGTH_LONG).show();
-            }
-        });
-    }
-
-    private void loadMoreDataFromApi() {
-        client.getHomeTimeLine(lastTweetId, new JsonHttpResponseHandler(){
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
-                addTweets(response);
-            }
-
-            @Override
-            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                Toast.makeText(TimelineActivity.this, getString(R.string.network_error), Toast.LENGTH_LONG).show();
-            }
-        });
-    }
-
-    private void addTweets(JSONArray response) {
-        final ArrayList<Tweet> collection = Tweet.fromJsonArray(response);
-        final Tweet lastTweet = collection.get(collection.size() - 1);
-        lastTweetId = lastTweet.getUid();
-        adapter.addAll(collection);
-        adapter.notifyDataSetChanged();
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_timeline, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
+        PagerSlidingTabStrip tabStrip = (PagerSlidingTabStrip) findViewById(R.id.tabs);
+        tabStrip.setViewPager(viewPager);
     }
 
     public void onClickTweet(MenuItem item) {
@@ -112,9 +38,55 @@ public class TimelineActivity extends ActionBarActivity {
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_timeline, menu);
+        return true;
+    }
+
+    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        populateTimeline();
-        lvTweets.setSelectionAfterHeaderView();
-//        lvTweets.setVerticalScrollbarPosition(0);
+        
+        viewPager.setCurrentItem(0);
+        ((TweetsListFragment) pagerAdapter.getRegisteredFragment(0)).update();
+    }
+
+    public void onClickProfile(MenuItem item) {
+        Intent i = new Intent(TimelineActivity.this, ProfileActivity.class);
+        startActivity(i);
+    }
+
+    public class TweetsPagerAdapter extends SmartFragmentStatePagerAdapter {
+        private String tabTitles[] = { getString(R.string.home), getString(R.string.mentions) };
+        
+        public TweetsPagerAdapter(FragmentManager fm) {
+            super(fm);
+        }
+
+        @Override
+        public int getItemPosition(Object object) {
+            return POSITION_NONE;
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            switch (position) {
+                case 0:
+                    return new HomeTimelineFragment();
+                case 1:
+                    return new MentionsTimelineFragment();
+                default:break;
+            }
+            return null;
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            return tabTitles[position];
+        }
+
+        @Override
+        public int getCount() {
+            return tabTitles.length;
+        }
     }
 }

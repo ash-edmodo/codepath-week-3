@@ -46,9 +46,9 @@
 
 Advanced user stories are optional:
 
-[~] Advanced: Robust error handling, check if internet is available, handle error cases, network failures
+[X] Advanced: Robust error handling, check if internet is available, handle error cases, network failures
 
-[~] Advanced: When a network request is sent, user sees an indeterminate progress indicator
+[] Advanced: When a network request is sent, user sees an indeterminate progress indicator
 
 [] Advanced: User can "reply" to any tweet on their home timeline
 
@@ -58,13 +58,11 @@ Advanced user stories are optional:
 
 [] Advanced: User can take favorite (and unfavorite) or reweet actions on a tweet
 
-[~] Advanced: Improve the user interface and theme the app to feel twitter branded
+[] Advanced: Improve the user interface and theme the app to feel twitter branded
 
-[~] Advanced: User can search for tweets matching a particular query and see results
+[] Advanced: User can search for tweets matching a particular query and see results
 
 [] Bonus: User can view their direct messages (or send new ones)
-
-[~] Implement view-holder pattern for tweet-items
 
 
 Walk Through 1

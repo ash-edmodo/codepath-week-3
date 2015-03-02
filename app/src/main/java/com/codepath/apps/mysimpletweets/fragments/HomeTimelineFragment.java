@@ -43,6 +43,8 @@ public class HomeTimelineFragment extends TweetsListFragment {
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
                 Toast.makeText(getActivity(), getString(R.string.network_error), Toast.LENGTH_LONG).show();
+                client.clearAccessToken();
+                getActivity().finish();
             }
         });
     }

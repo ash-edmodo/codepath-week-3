@@ -32,11 +32,6 @@ public class TimelineActivity extends ActionBarActivity {
         tabStrip.setViewPager(viewPager);
     }
 
-    public void onClickTweet(MenuItem item) {
-        Intent intent = new Intent(this, ComposeActivity.class);
-        startActivityForResult(intent, 42);
-    }
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_timeline, menu);
@@ -45,9 +40,14 @@ public class TimelineActivity extends ActionBarActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        
+
         viewPager.setCurrentItem(0);
         ((TweetsListFragment) pagerAdapter.getRegisteredFragment(0)).update();
+    }
+
+    public void onClickTweet(MenuItem item) {
+        Intent intent = new Intent(this, ComposeActivity.class);
+        startActivityForResult(intent, 42);
     }
 
     public void onClickProfile(MenuItem item) {

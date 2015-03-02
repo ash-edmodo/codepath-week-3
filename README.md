@@ -69,4 +69,8 @@ Walk Through 1
 --------------
 ![Video Walkthrough](https://raw.githubusercontent.com/ash-edmodo/codepath-week-3/master/walkthrough1.gif)
 
+Walk Through 1
+--------------
+![Video Walkthrough](https://raw.githubusercontent.com/ash-edmodo/codepath-week-3/master/walkthrough2.gif)
+
 GIF created with [LiceCap](http://www.cockos.com/licecap/).

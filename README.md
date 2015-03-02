@@ -1,4 +1,4 @@
-# Week 3 Project: Simple Twitter Client
+# Week 4 Project: Simple Twitter Client
 
 [x] User can sign in to Twitter using OAuth login
 
